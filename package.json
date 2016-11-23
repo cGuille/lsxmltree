@@ -1,0 +1,15 @@
+{
+  "name": "lsxmltree",
+  "version": "0.1.0",
+  "description": "",
+  "main": "lsxmltree",
+  "dependencies": {
+    "xmldom": "^0.1.19"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Guillaume Charmetant <cguille.dev@gmail.com>",
+  "license": "MIT"
+}

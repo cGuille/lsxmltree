@@ -1,0 +1,82 @@
+#!/usr/bin/env node
+
+/*
+  Author: @cGuille <cguille.dev@gmail.com>
+  Usage: node lsxmltree <xml file path>
+
+  The MIT License (MIT)
+
+  Copyright (c) 2015 Guillaume Charmetant
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+*/
+
+var fs = require('fs');
+var DOMParser = require('xmldom').DOMParser;
+var args = process.argv.slice(2);
+if (!args.length) {
+  console.error('Missing argument: xml filepath.');
+  process.exit(1);
+}
+
+var filepath = args.join(' ');
+if (!fs.existsSync(filepath)) {
+  console.error("No such file: '" + filepath + "'.");
+  process.exit(1);
+}
+
+var xmlFileContent = fs.readFileSync(filepath);
+if (!xmlFileContent) {
+  console.error("Could not read content of '" + filepath + "'.");
+  process.exit(1);
+}
+
+var parser = new DOMParser();
+var dom = parser.parseFromString(xmlFileContent.toString());
+var document = dom.documentElement
+
+var branch = [];
+function traverse(element) {
+  if (!element.tagName) {
+    return;
+  }
+  var attributes = attrStr(element.attributes)
+  branch.push(element.tagName + (attributes.length ? '[' + attributes + ']' : ''));
+  printBranch();
+  for (var i = 0; i < element.childNodes.length; ++i) {
+      traverse(element.childNodes.item(i));
+  }
+  branch.pop();
+}
+function printBranch() {
+  console.log(branch.join('/'));
+}
+function attrStr(attrNodeList) {
+  var strParts = [];
+  var attrNode;
+
+  for (var i = 0; i < attrNodeList.length; ++i) {
+    attrNode = attrNodeList.item(i);
+    strParts.push(attrNode.name + '=' + attrNode.value);
+  }
+
+  return strParts.join(',');
+}
+
+traverse(document);
