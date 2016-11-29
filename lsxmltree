@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 /*
-  Author: @cGuille <cguille.dev@gmail.com>
+  Author: Guillaume Charmetant (@cGuille) <cguille.dev@gmail.com>
   Usage: node lsxmltree <xml file path>
 
   The MIT License (MIT)
 
-  Copyright (c) 2015 Guillaume Charmetant
+  Copyright (c) 2015 - 2016 Guillaume Charmetant
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
